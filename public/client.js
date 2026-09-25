@@ -232,12 +232,16 @@
     }
     if (t < T4) {
       // Второй пролёт "дубля": шайба уже видна (только что остановилась), поэтому без
-      // повторной анимации появления (без роста/прозрачности/кольца) и без стрелки —
-      // просто тихо "прицеливается" и сразу летит дальше.
+      // повторной анимации появления (без роста/прозрачности/кольца) — просто тихо
+      // "прицеливается" (со стрелкой, крутящейся к направлению второго броска) и сразу летит дальше.
       const lt = t - T3;
       setPhase(lt < SPIN ? 'choosing' : 'aiming');
       puckImg.style.opacity = '1'; puckImg.style.transform = 'scale(1)';
-      arrow.style.opacity = '0'; ripple.style.opacity = '0';
+      const ang2 = p2.sa + (p2.ea - p2.sa) * easeOut(clamp01(lt / SPIN));
+      const pop2 = 1 + .25 * Math.sin(Math.PI * clamp01((lt - SPIN) / 350));
+      arrow.style.opacity = (clamp01(lt / 150) * (1 - clamp01((lt - INTRO) / 250))).toFixed(3);
+      arrow.style.transform = `rotate(${ang2.toFixed(2)}deg) scale(${pop2.toFixed(3)})`;
+      ripple.style.opacity = '0';
       place(p2.sp[0], p2.sp[1]);
       return;
     }
