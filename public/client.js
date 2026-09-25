@@ -81,7 +81,7 @@
       const f1 = document.createElement('div'); f1.className = 'race-frame'; f1.append(frag);
       const f2 = document.createElement('div'); f2.className = 'race-frame'; f2.innerHTML = f1.innerHTML;
       track.append(f1, f2); zoneMap.append(track);
-      raceTrackEl = track; track.style.transform = `translateY(${(-raceOffset).toFixed(3)}%)`; // если DOM зон пересобрался посреди гонки (напр. state-рассылка от захода/выхода игрока), не сбрасываем сдвиг конвейера в 0 — берём текущий, следующий кадр его тут же уточнит по таймеру
+      raceTrackEl = track; track.style.transform = `translateY(${(-raceOffset / 100 * W).toFixed(2)}px)`; // если DOM зон пересобрался посреди гонки (напр. state-рассылка от захода/выхода игрока), не сбрасываем сдвиг конвейера в 0 — берём текущий, следующий кадр его тут же уточнит по таймеру
     } else { zoneMap.append(frag); raceTrackEl = null; }
     st.players.forEach(p => {
       const it = document.createElement('div'); it.className = 'ice-player';
@@ -207,7 +207,7 @@
   function updateRaceScroll(t) {
     if (!raceTrackEl || finished) return;
     raceOffset = ((Math.max(0, t) % RACE_MS) / RACE_MS) * 100;
-    raceTrackEl.style.transform = `translateY(${(-raceOffset).toFixed(3)}%)`;
+    raceTrackEl.style.transform = `translateY(${(-raceOffset / 100 * W).toFixed(2)}px)`;
   }
   // Ставит шайбу с поправкой на текущий сдвиг конвейера (в аномалии "race"), чтобы она всегда
   // визуально была над той же зоной, что и по физике/победителю, даже пока зоны едут конвейером.
