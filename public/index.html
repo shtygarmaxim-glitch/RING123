@@ -125,18 +125,23 @@ html,body{background:#0a0a0a;font-family:var(--ff-b)}
 .anomaly-badge .ab-ball{position:absolute;width:9px;height:9px;border-radius:50%;background:#fff;box-shadow:0 0 8px rgba(255,255,255,.85);opacity:0}
 .anomaly-badge.rolling .ab-ball{opacity:1;animation:ab-roll .45s ease-in-out infinite alternate}
 @keyframes ab-roll{from{transform:translateX(-11px)}to{transform:translateX(11px)}}
-.anomaly-badge .ab-icon{font-size:19px;line-height:1;opacity:0;transform:scale(.5);transition:opacity .2s ease,transform .3s cubic-bezier(.34,1.56,.64,1)}
+.anomaly-badge .ab-icon{width:24px;height:24px;border-radius:7px;background-size:cover;background-position:center;opacity:0;transform:scale(.5);transition:opacity .2s ease,transform .3s cubic-bezier(.34,1.56,.64,1)}
+.ab-icon.ic-race{background-image:url(/icons/icon-race.jpg)}
+.ab-icon.ic-mirage{background-image:url(/icons/icon-mirage.jpg)}
+.ab-icon.ic-redo{background-image:url(/icons/icon-redo.jpg)}
 .anomaly-badge.rolling .ab-icon{opacity:1;transform:scale(1)}
 .anomaly-badge.settled .ab-ball{display:none}
 .anomaly-badge.settled .ab-icon{opacity:1;transform:scale(1)}
 .adm-anomaly{display:grid;grid-template-columns:repeat(2,1fr);gap:7px;margin:8px 0 4px}
-.adm-anomaly button{padding:9px 4px;border:1px solid rgba(255,255,255,.1);border-radius:10px;background:rgba(255,255,255,.06);color:#c9c5b8;font:700 11px var(--ff-b);cursor:pointer}
+.adm-anomaly button{padding:9px 4px;border:1px solid rgba(255,255,255,.1);border-radius:10px;background:rgba(255,255,255,.06);color:#c9c5b8;font:700 11px var(--ff-b);cursor:pointer;display:flex;align-items:center;justify-content:center;gap:6px}
+.adm-anomaly button img{width:16px;height:16px;border-radius:4px;object-fit:cover}
+.hd-anomaly{width:15px;height:15px;border-radius:4px;object-fit:cover;vertical-align:-2px;margin-left:3px}
 /* аномалия "Гонка": зоны едут вверх конвейером, пока шайба катится */
 .race-track{position:absolute;left:0;right:0;top:0;height:200%;animation:race-scroll 3.6s linear infinite;will-change:transform}
 .race-frame{position:absolute;left:0;right:0;top:0;height:50%}
 .race-frame:nth-child(2){top:50%}
 @keyframes race-scroll{from{transform:translateY(0)}to{transform:translateY(-50%)}}
-/* аномалия "Мираж": весь экран "плывёт" — жидкое искажение через SVG feTurbulence/feDisplacementMap */
+/* аномалия "Hide": весь экран "плывёт" — жидкое искажение через SVG feTurbulence/feDisplacementMap */
 .ice-screen.mirage-active{filter:url(#mirageFilter)}
 </style></head><body>
 <svg width="0" height="0" style="position:absolute" aria-hidden="true"><defs><filter id="mirageFilter" x="-20%" y="-20%" width="140%" height="140%">
@@ -177,7 +182,7 @@ html,body{background:#0a0a0a;font-family:var(--ff-b)}
     <label class="ice-bet-field">Сумма, ⭐ (минус — списать)<input id="admAmt" type="number" step="0.01" value="1" inputmode="decimal"></label>
     <button class="ice-bet-confirm" id="admGive">Выдать / списать</button>
     <label class="ice-bet-field">Аномалии (форс на следующий раунд)</label>
-    <div class="adm-anomaly"><button data-an="race">🏁 Гонка</button><button data-an="mirage">🌊 Мираж</button><button data-an="redo">🔁 Дубль</button><button data-an="">✖ Снять</button></div>
+    <div class="adm-anomaly"><button data-an="race"><img src="/icons/icon-race.jpg" alt="">Гонка</button><button data-an="mirage"><img src="/icons/icon-mirage.jpg" alt="">H̷̢̨̹̞͚̫̖͓̳͇̰̹͕̝̘̘͂͛͒̈́͌̈́̈́̕̕͝͝͝͝i̸̟̮͙͕͎͇̱̯̪̤̺̯̩̗̘̐̅̿͌͛̈́̾̓́̓̿̿̕͘͝d̶͉̤̤͕̬̱̻̥͎͙͎̹̰̲̩̈́͐͌̿̓͆̈́̄̈́̄̾͐̚͘͝e̸̬̥̫͙̜̫͕̙̩̳͙̰͚͖̠̍̾̾͛̇͋͊̇̕͝͝͝͝͝</button><button data-an="redo"><img src="/icons/icon-redo.jpg" alt="">Вторая жизнь!</button><button data-an="">✖ Снять</button></div>
     <div class="adm-list" id="adminList"></div></div></div>
   <div class="toast" id="toast"></div>
 </div>
