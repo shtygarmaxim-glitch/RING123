@@ -94,7 +94,7 @@ const sha256 = s => crypto.createHash('sha256').update(String(s)).digest('hex');
 // конкретную аномалию на следующий раунд — тогда рандом не кидается.
 const ANOMALY_WEIGHTS = { race: 0.08, mirage: 0.06, redo: 0.06 };
 const ANOMALY_KEYS = Object.keys(ANOMALY_WEIGHTS);
-const ANOMALY_NAMES = { race: 'Гонка', mirage: 'Мираж', redo: 'Дубль' };
+const ANOMALY_NAMES = { race: 'Гонка', mirage: 'H̷̢̨̹̞͚̫̖͓̳͇̰̹͕̝̘̘͂͛͒̈́͌̈́̈́̕̕͝͝͝͝i̸̟̮͙͕͎͇̱̯̪̤̺̯̩̗̘̐̅̿͌͛̈́̾̓́̓̿̿̕͘͝d̶͉̤̤͕̬̱̻̥͎͙͎̹̰̲̩̈́͐͌̿̓͆̈́̄̈́̄̾͐̚͘͝e̸̬̥̫͙̜̫͕̙̩̳͙̰͚͖̠̍̾̾͛̇͋͊̇̕͝͝͝͝͝', redo: 'Вторая жизнь!' };
 function rollAnomaly() {
   const r = Math.random(); let acc = 0;
   for (const k of ANOMALY_KEYS) { acc += ANOMALY_WEIGHTS[k]; if (r < acc) return k; }
