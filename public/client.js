@@ -73,7 +73,11 @@
   function render() {
     zoneMap.innerHTML = ''; legend.innerHTML = '';
     const sum = L.reduce((s, p) => s + p.stake, 0);
-    const racing = st.anomaly === 'race' && st.status === 'running';
+    // 'result' держим в том же "конвейерном" режиме, что и 'running' — иначе в момент, когда
+    // сервер шлёт финальный статус, эта проверка резко становится false, зона-мозаика пересобирается
+    // уже БЕЗ сдвига raceOffset (который к этому моменту заморожен на правильном значении в
+    // updateRaceScroll) — и весь фон под шайбой визуально "прыгает" на нулевой сдвиг конвейера.
+    const racing = st.anomaly === 'race' && (st.status === 'running' || st.status === 'result');
     const { frag, zones } = buildMosaic();
     zones.forEach(({ p, el }) => { p.zone = el; });
     if (racing) {
