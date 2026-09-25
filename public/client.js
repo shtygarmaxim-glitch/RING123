@@ -296,9 +296,9 @@
   // так что до этого момента бейдж вообще не появляется и не спойлерит исход.
   // Как только раунд стартует, бейдж выскакивает в углу арены и "крутит" иконки между
   // вариантами анoмалий примерно 0.7с, затем останавливается на реальной аномалии этого раунда.
-  const ANOMALY_NAMES = { race: 'Гонка 🏁', mirage: 'Мираж 🌊', redo: 'Дубль 🔁' };
-  const ANOMALY_TAG = { race: '🏁', mirage: '🌊', redo: '🔁' };
-  const ANOMALY_CYCLE = ['🏁', '🌊', '🔁'];
+  const ANOMALY_NAMES = { race: 'Гонка', mirage: 'H̷̢̨̹̞͚̫̖͓̳͇̰̹͕̝̘̘͂͛͒̈́͌̈́̈́̕̕͝͝͝͝i̸̟̮͙͕͎͇̱̯̪̤̺̯̩̗̘̐̅̿͌͛̈́̾̓́̓̿̿̕͘͝d̶͉̤̤͕̬̱̻̥͎͙͎̹̰̲̩̈́͐͌̿̓͆̈́̄̈́̄̾͐̚͘͝e̸̬̥̫͙̜̫͕̙̩̳͙̰͚͖̠̍̾̾͛̇͋͊̇̕͝͝͝͝͝', redo: 'Вторая жизнь!' };
+  const ANOMALY_ICON = { race: 'ic-race', mirage: 'ic-mirage', redo: 'ic-redo' };
+  const ANOMALY_CYCLE = ['ic-race', 'ic-mirage', 'ic-redo'];
   let shownAnomalyFor = null, anomalySpin = null, anomalyRollT = null;
   function updateAnomalyUI() {
     const badge = $('anomalyBadge'), icon = badge.querySelector('.ab-icon');
@@ -313,13 +313,13 @@
       shownAnomalyFor = st.id;
       clearInterval(anomalySpin); clearTimeout(anomalyRollT);
       badge.classList.remove('settled');
-      if (st.anomaly && ANOMALY_TAG[st.anomaly]) {
+      if (st.anomaly && ANOMALY_ICON[st.anomaly]) {
         badge.classList.add('show', 'rolling');
-        let i = 0; icon.textContent = ANOMALY_CYCLE[0];
-        anomalySpin = setInterval(() => { icon.textContent = ANOMALY_CYCLE[++i % ANOMALY_CYCLE.length]; }, 110);
+        let i = 0; icon.classList.remove(...ANOMALY_CYCLE); icon.classList.add(ANOMALY_CYCLE[0]);
+        anomalySpin = setInterval(() => { icon.classList.remove(...ANOMALY_CYCLE); icon.classList.add(ANOMALY_CYCLE[++i % ANOMALY_CYCLE.length]); }, 110);
         anomalyRollT = setTimeout(() => {
           clearInterval(anomalySpin);
-          icon.textContent = ANOMALY_TAG[st.anomaly];
+          icon.classList.remove(...ANOMALY_CYCLE); icon.classList.add(ANOMALY_ICON[st.anomaly]);
           badge.classList.remove('rolling'); badge.classList.add('settled');
           toast('Аномалия! ' + ANOMALY_NAMES[st.anomaly]);
         }, 700);
@@ -341,13 +341,14 @@
   $('betAmt').addEventListener('input', () => { $('betAmt').value = $('betAmt').value.replace(/[^0-9]/g, ''); });
 
   // ---------- история игр ----------
+  const ANOMALY_ICON_URL = { race: '/icons/icon-race.jpg', mirage: '/icons/icon-mirage.jpg', redo: '/icons/icon-redo.jpg' };
   let hData = { top: null, last: null, list: [] }, curGame = null;
   const GEM = '<svg class="gem" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M6.2 3h11.6l4.2 6.2L12 21.5 2 9.2z"/><path d="M2 9.2h20M9 3l-2.2 6.2L12 21.5M15 3l2.2 6.2L12 21.5" fill="none" stroke="#0b0b0b" stroke-opacity=".35" stroke-width="1"/></svg>';
   const gp = g => ({ name: g.name || '?', photo: g.photo, color: g.color || '#ffc61a' });
   function fillCard(el, g) {
     if (!g) { el.innerHTML = '<span class="hd-empty">Пока нет игр</span>'; return; }
     el.innerHTML = ''; el.append(avatar(gp(g), 'lg-av', 22));
-    const tag = g.anomaly && ANOMALY_TAG[g.anomaly] ? ` <span class="hd-anomaly">${ANOMALY_TAG[g.anomaly]}</span>` : '';
+    const tag = g.anomaly && ANOMALY_ICON_URL[g.anomaly] ? ` <img class="hd-anomaly" src="${ANOMALY_ICON_URL[g.anomaly]}" alt="">` : '';
     el.insertAdjacentHTML('beforeend', `<span class="hd-name">${esc(g.name)}${tag}</span><b class="hd-win">+${fmt(g.pool)}${GEM}</b>`);
   }
   function renderHistory(h) {
@@ -358,7 +359,7 @@
     h.list.forEach(g => {
       const row = document.createElement('div'); row.className = 'hist-row'; row.append(avatar(gp(g), 'lg-av', 30));
       const when = new Date(g.ts).toLocaleString('ru-RU', { day: '2-digit', month: '2-digit', hour: '2-digit', minute: '2-digit' });
-      const tag = g.anomaly && ANOMALY_TAG[g.anomaly] ? ` <span class="hd-anomaly">${ANOMALY_TAG[g.anomaly]}</span>` : '';
+      const tag = g.anomaly && ANOMALY_ICON_URL[g.anomaly] ? ` <img class="hd-anomaly" src="${ANOMALY_ICON_URL[g.anomaly]}" alt="">` : '';
       row.insertAdjacentHTML('beforeend', `<span style="flex:1;min-width:0"><span class="hd-name">${esc(g.name)}${tag}</span><small>${g.players.length} игр. · ${when}</small></span><b class="hd-win">+${fmt(g.pool)}${GEM}</b>`);
       row.addEventListener('click', () => openGame(g));
       list.append(row);
