@@ -201,33 +201,28 @@
       arena.style.transform = `translate(${tx}%,${ty}%) scale(${sc})`;
     }
   }
-  // Сдвигает конвейер зон и возвращает текущий сдвиг (0-100, % высоты арены). Пока раунд не
-  // завершён — считаем от общего таймера полёта; как только победитель определён (finished),
-  // просто перестаём его обновлять, и конвейер с шайбой замирают на одном и том же кадре.
+  // Сдвигает конвейер зон (0-100, % высоты арены). Пока раунд не завершён — считаем от общего
+  // таймера полёта; как только победитель определён (finished), просто перестаём его обновлять.
+  // Шайба на конвейер никак не завязана — она всегда едет по своей обычной физической траектории,
+  // конвейер под ней — чисто фоновая декорация.
   function updateRaceScroll(t) {
     if (!raceTrackEl || finished) return;
     raceOffset = ((Math.max(0, t) % RACE_MS) / RACE_MS) * 100;
     raceTrackEl.style.transform = `translateY(${(-raceOffset / 100 * W).toFixed(2)}px)`;
   }
-  // Ставит шайбу с поправкой на текущий сдвиг конвейера (в аномалии "race"), чтобы она всегда
-  // визуально была над той же зоной, что и по физике/победителю, даже пока зоны едут конвейером.
-  function placePuck(x, y) {
-    if (raceTrackEl) { place(x, ((y - raceOffset) % 100 + 100) % 100); }
-    else place(x, y);
-  }
   function frame(t) {
     if (plan.mode === 'redo') { frameRedo(t); return; }
     updateRaceScroll(t);
-    if (t < 0) { puck.style.visibility = 'hidden'; placePuck(plan.sp[0], plan.sp[1]); fx(0, plan.sa, plan.ea); return; }
+    if (t < 0) { puck.style.visibility = 'hidden'; place(plan.sp[0], plan.sp[1]); fx(0, plan.sa, plan.ea); return; }
     puck.style.visibility = 'visible';
     fx(t, plan.sa, plan.ea);
-    if (t < INTRO) { setPhase(t < SPIN ? 'choosing' : 'aiming'); placePuck(plan.sp[0], plan.sp[1]); return; }
+    if (t < INTRO) { setPhase(t < SPIN ? 'choosing' : 'aiming'); place(plan.sp[0], plan.sp[1]); return; }
     setPhase('rushing');
     const ft = Math.min(t - INTRO, plan.flightMs), idx = ft / 1000 * 60, i = Math.min(plan.n - 1, Math.floor(idx)), f = idx - i;
     const a = plan.pts[i], b = plan.pts[i + 1], x = a[0] + (b[0] - a[0]) * f, y = a[1] + (b[1] - a[1]) * f;
-    placePuck(x, y);
+    place(x, y);
     applyCamZoom(ft, plan.flightMs, x, y);
-    if (ft >= plan.flightMs && !finished) { finished = true; applyResult(); } // "Гонка": конвейер и шайба замирают вместе, на одном и том же сдвиге
+    if (ft >= plan.flightMs && !finished) { finished = true; applyResult(); }
   }
   // Аномалия "redo": интро1 → пролёт1 → короткая замершая пауза (без победителя) → интро2 → пролёт2 → победитель.
   function frameRedo(t) {
