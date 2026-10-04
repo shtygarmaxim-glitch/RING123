@@ -1,0 +1,202 @@
+/* ===== Ice Arena — TILT-style theme (black + red). Design only, no logic changes. ===== */
+:root{
+  --bg:#000;--card:#0b0b0c;--yellow:#ff1744;--yellow2:#ff3358;--text:#fff;--muted:#8a8a90;--sub:#8a8a90;
+  --green:#2ee27a;--border:rgba(255,255,255,.07);
+  --t-red:#ff1744;--t-red2:#d6001f;--t-red-glow:rgba(255,23,68,.38);
+  --t-card:#0b0b0c;--t-card2:#101012;--t-line:rgba(255,255,255,.07);
+  --t-green:linear-gradient(180deg,#34e884,#16b85a);--t-green-glow:rgba(46,226,122,.35);
+  --t-btn:linear-gradient(180deg,#ff2a55,#d6001f);
+}
+html,body{background:#000!important;color:#fff}
+.app{
+  background:
+    radial-gradient(90% 26% at 50% 0%,rgba(255,23,68,.07),transparent 70%),
+    radial-gradient(100% 30% at 50% 100%,rgba(255,23,68,.08),transparent 72%),
+    #000!important;
+}
+button:focus-visible,input:focus-visible{outline:2px solid rgba(255,23,68,.7)!important}
+
+/* ---------- Top bar: balance left, red top-up right ---------- */
+.balance-row{justify-content:space-between!important;gap:12px!important;padding:0 14px!important;margin:12px 0 14px!important}
+.balance{
+  background:transparent!important;border:0!important;box-shadow:none!important;padding:0!important;
+  display:flex;flex-wrap:wrap;align-items:baseline;column-gap:4px;row-gap:2px;font-size:15px;font-weight:800;color:#fff;
+  position:relative;padding-left:0!important;
+}
+.balance::before{content:"Ваш баланс";display:block;flex:0 0 100%;font-size:10px;font-weight:600;color:#8a8a90;letter-spacing:.2px}
+.topup,.profile-icon-btn,.raffle-create-btn,.claim-button,.task-create-submit,.maintenance-toggle{
+  background:var(--t-btn)!important;color:#fff!important;border:0!important;border-radius:14px!important;
+  font-weight:800!important;padding:11px 18px!important;
+  box-shadow:0 6px 22px var(--t-red-glow),inset 0 1px rgba(255,255,255,.22)!important;
+}
+.topup{font-size:13px!important}
+
+/* ---------- Primary buttons ---------- */
+.bet-button,.confirm,.raffle-confirm,.ice-join{
+  background:var(--t-btn)!important;color:#fff!important;border:0!important;border-radius:14px!important;
+  font-weight:800!important;font-size:16px!important;padding:15px!important;letter-spacing:.2px;
+  box-shadow:0 8px 28px var(--t-red-glow),inset 0 1px rgba(255,255,255,.22)!important;
+}
+.bet-button:disabled,.confirm:disabled{opacity:.45!important;box-shadow:none!important}
+.bet-button.bounce-repeat{background:transparent!important;border:1px solid rgba(255,23,68,.5)!important;color:#ff4d6e!important;box-shadow:none!important}
+.bounce-cash,.bet-button.bounce-cash,.ice-start.visible{
+  background:var(--t-green)!important;color:#04180c!important;
+  box-shadow:0 8px 26px var(--t-green-glow),inset 0 1px rgba(255,255,255,.35)!important;
+}
+
+/* ---------- Panels / cards ---------- */
+.mode-card,.mode-controls,.bounce-controls,.bounce-stage,.players-section,.profile-card,.stats-grid>*,
+.referral-card,.promo-card,.tasks-card,.profile-info,.system-card,.hd-card,.ice-controls,.ice-player,
+.ice-stats>div,.ice-arena-shell,.raffle-cards>*,.history-modal-card,.winner-card,.upgrade-result-card,.profile-stat{
+  background:var(--t-card)!important;border:1px solid var(--t-line)!important;border-radius:18px!important;
+  box-shadow:none!important;
+}
+.ice-stats>div:nth-child(2){background:linear-gradient(135deg,#2a0610,#1a0409)!important}
+.ice-stats>div:nth-child(2) b{color:#ff4d6e!important}
+.ice-stats b{color:#fff!important}
+.ice-arena-shell{box-shadow:inset 0 0 40px rgba(255,23,68,.10)!important;border-color:rgba(255,23,68,.35)!important}
+.players-section-head h2,.raffles-head h2,.tasks-title,.promo-title,.referral-title{color:#fff}
+.raffles-kicker,.games-showcase-kicker{color:#ff4d6e!important}
+.bounce-field-label,.bounce-tag,.bounce-history,.profile-stat span,.profile-info span,.referral-subtitle,
+.tasks-subtitle,.promo-subtitle,.raffle-card-meta,.raffle-card-bottom,.ice-stats span,.ice-stake-label,.bounce-balance span{color:#8a8a90!important}
+
+/* ---------- Inputs, amount, quick bets, tabs ---------- */
+input,.bounce-input,.input-row,.bounce-amount>button,.task-input-row{
+  background:#0e0e10!important;border-color:var(--t-line)!important;color:#fff!important;border-radius:14px!important;
+}
+.bounce-amount>button{border:1px solid var(--t-line)!important}
+.bounce-quick button,.ice-stakes button,.bounce-tabs button,.tab-toggle button,.sg-total button,.sg-balls button,.chip{
+  background:#0e0e10!important;border:1px solid var(--t-line)!important;color:#b4b4ba!important;border-radius:999px!important;
+}
+.bounce-quick button.active,.ice-stakes button.active,.bounce-tabs button.active,.tab-toggle button.active,
+.bounce-quick .active,.bounce-tabs .active,.chip.active,.chip.on{
+  border-color:#ff1744!important;background:rgba(255,23,68,.10)!important;color:#fff!important;
+  box-shadow:0 0 14px rgba(255,23,68,.25)!important;
+}
+
+/* ---------- Games list: big red banner cards ---------- */
+.games-showcase-head h1{color:#fff;font-style:italic;letter-spacing:.5px}
+.games-showcase-count{background:var(--t-card)!important;border:1px solid var(--t-line)!important}
+.games-group-title b{color:#fff}.games-group-title span{color:#ff1744!important}
+.games-group-title i{background:linear-gradient(90deg,rgba(255,23,68,.5),transparent)!important}
+.game-card{
+  border:1px solid rgba(255,60,90,.45)!important;border-radius:18px!important;overflow:hidden;position:relative;
+  background:linear-gradient(135deg,#5a000f 0%,#c40020 55%,#7a0014 100%)!important;
+  box-shadow:0 10px 30px rgba(255,23,68,.22),inset 0 1px rgba(255,255,255,.18)!important;
+}
+.game-card-name{color:#fff!important;font-style:italic;font-weight:900!important;letter-spacing:.8px;text-shadow:0 2px 10px rgba(0,0,0,.55)}
+.games-locked-row{background:var(--t-card)!important;border:1px dashed var(--t-line)!important;color:#555!important}
+.games-soon-hint{color:#6c6c72!important}
+
+/* ---------- Back button & game headers ---------- */
+.upgrade-back,.bounce-back,.bounce-sound,.hd-btn,.playhub-back,.history-btn{
+  background:#17171a!important;border:1px solid var(--t-line)!important;color:#fff!important;border-radius:999px!important;
+}
+.bounce-title,.upgrade-title,.ice-title strong{color:#fff;font-weight:900;letter-spacing:.6px}
+.bounce-balance b{color:#fff}
+
+/* ---------- Bottom nav: black bar, red active line, raised red centre ---------- */
+.bottom-nav{
+  width:100%!important;max-width:600px!important;height:calc(62px + env(safe-area-inset-bottom,0px))!important;
+  margin:0!important;padding:0 0 env(safe-area-inset-bottom,0px)!important;border-radius:0!important;
+  border:0!important;border-top:1px solid var(--t-line)!important;
+  background:#050505!important;box-shadow:0 -10px 30px rgba(255,23,68,.06)!important;
+  overflow:visible!important;align-items:end;
+}
+.bottom-nav .nav-item{
+  color:#7d7d83!important;background:transparent!important;border-radius:0!important;box-shadow:none!important;height:62px;
+}
+.bottom-nav .nav-item::before{filter:brightness(0) invert(.52)!important}
+.bottom-nav .nav-item::after{color:#7d7d83!important;font-weight:600;font-size:9px}
+.bottom-nav .nav-item.active{
+  color:#ff4d6e!important;box-shadow:none!important;
+  background-image:linear-gradient(#ff1744,#ff1744),radial-gradient(70% 46px at 50% 0,rgba(255,23,68,.22),transparent)!important;
+  background-repeat:no-repeat!important;background-position:top center,top center!important;background-size:34px 2px,100% 46px!important;
+}
+.bottom-nav .nav-item.active::before{
+  filter:brightness(0) saturate(100%) invert(21%) sepia(98%) saturate(6500%) hue-rotate(345deg) brightness(104%)!important;
+}
+.bottom-nav .nav-item.active::after{color:#ff4d6e!important}
+/* Games = the round "home" button */
+.bottom-nav .nav-item[data-view="games"]{
+  width:58px;height:58px;margin-top:-22px;justify-self:center;border-radius:50%!important;align-self:start;
+  background-image:linear-gradient(180deg,#ff2a55,#d6001f)!important;background-size:100% 100%!important;background-position:center!important;
+  border:3px solid #050505!important;
+  box-shadow:0 0 0 1px rgba(255,23,68,.5),0 8px 24px rgba(255,23,68,.55)!important;
+}
+.bottom-nav .nav-item[data-view="games"]::before{top:15px!important;width:24px!important;height:24px!important;filter:brightness(0) invert(1)!important}
+.bottom-nav .nav-item[data-view="games"]::after{display:none!important}
+.bottom-nav .nav-item[data-view="games"].active{
+  background-image:linear-gradient(180deg,#ff3a62,#e0001f)!important;
+  box-shadow:0 0 0 1px rgba(255,255,255,.25),0 8px 30px rgba(255,23,68,.75)!important;
+}
+.bottom-nav .nav-item[data-view="games"].active::before{filter:brightness(0) invert(1)!important}
+
+/* ---------- Modals: dark bottom sheets ---------- */
+.modal{background:rgba(0,0,0,.72)!important;-webkit-backdrop-filter:blur(10px);backdrop-filter:blur(10px)}
+.modal-card,.winner-card,.upgrade-result-card{
+  background:linear-gradient(180deg,#111113,#09090a)!important;border:1px solid var(--t-line)!important;
+  border-radius:24px!important;box-shadow:0 -10px 50px rgba(0,0,0,.6)!important;color:#fff;
+}
+.modal-close,.upgrade-result-close{background:#1a1a1d!important;color:#fff!important;border:1px solid var(--t-line)!important}
+.sheet-handle{background:rgba(255,255,255,.18)!important;width:38px!important}
+.modal-balance{color:#8a8a90!important}
+.winner-title,.winner-name,.winner-payout{color:#fff}
+.winner-payout,.winner-win-label{color:#2ee27a!important}
+
+/* ---------- Toast / popup notifications ---------- */
+.toast{
+  background:rgba(14,14,16,.96)!important;border:1px solid var(--t-line)!important;border-radius:16px!important;
+  color:#fff!important;box-shadow:0 14px 40px rgba(0,0,0,.65),0 0 24px rgba(255,23,68,.12)!important;
+  -webkit-backdrop-filter:blur(12px);backdrop-filter:blur(12px);
+}
+.toast.t-success{--tc:46,226,122}.toast.t-error{--tc:255,23,68}.toast.t-warn{--tc:255,176,32}
+
+/* ---------- History / lists ---------- */
+.hd-row,.history-list>*,.hist-list>*,.tasks-list>*,.promo-row{
+  background:#0d0d0f!important;border:1px solid var(--t-line)!important;border-radius:14px!important;
+}
+.empty-players,.hd-empty{color:#6c6c72!important}
+
+/* ---------- Wheel (PvP / upgrade) ---------- */
+.pointer{filter:drop-shadow(0 0 8px rgba(255,23,68,.7))}
+.total-bank-label,.timer-label,.bank-label{color:#8a8a90!important;letter-spacing:.6px}
+.wheel-top-info .bank,.timer,.bank{color:#fff}
+
+/* ===== Pass 2: everywhere ===== */
+/* Games list: full-width stacked banners like in the video */
+.games-grid,.games-extra,.games-mini{display:grid!important;grid-template-columns:1fr!important;gap:10px!important}
+.game-card{min-height:92px;display:flex!important;align-items:center;justify-content:flex-start;padding:0 18px!important}
+.game-card-name{font-size:24px!important;position:relative;z-index:2}
+.game-art,.bounce-card-art,.ice-arena-card-art,.mini-art{opacity:.95}
+.game-card::after{content:"";position:absolute;inset:0;background:radial-gradient(60% 120% at 85% 50%,rgba(255,255,255,.14),transparent 60%);pointer-events:none}
+
+/* Game screens: stage + controls as dark glass panels */
+.bounce-game,.upgrade-game,.ice-screen,.solo-game{background:transparent!important}
+.bounce-stage,.solo-canvas,.ice-arena{background:#070708!important;border:1px solid var(--t-line)!important;border-radius:18px!important}
+.bounce-play,.sg-bet{background:var(--t-btn)!important;color:#fff!important}
+.bounce-input,.bounce-input input{background:transparent!important;color:#fff!important;font-weight:800}
+.bounce-amount>button,.sg-dec,.sg-inc{width:44px;font-size:18px;color:#fff!important}
+.bounce-history>*,.bounce-error{border-radius:12px}
+.bounce-error{color:#ff4d6e!important}
+.swap-icon{color:#ff4d6e!important}
+.input-row span{color:#8a8a90}
+
+/* Profile / raffles / tasks / admin */
+.profile-name,.profile-username,.raffle-card h3{color:#fff}
+.profile-username{color:#8a8a90}
+.avatar-large{border:2px solid rgba(255,23,68,.55)!important;box-shadow:0 0 22px rgba(255,23,68,.25)!important}
+.admin-tab,.tab-toggle button{background:#0e0e10!important;border:1px solid var(--t-line)!important;color:#b4b4ba!important;border-radius:12px!important}
+.admin-tab.active{background:rgba(255,23,68,.12)!important;border-color:#ff1744!important;color:#fff!important}
+.raffle-cards>*{overflow:hidden}
+.ton-connect-fallback,.ton-wallet-status{background:#0e0e10!important;border:1px solid var(--t-line)!important;color:#fff!important}
+.maintenance-card,.system-card{background:var(--t-card)!important;border:1px solid var(--t-line)!important}
+
+/* Winner / result overlays */
+.winner-overlay{background:rgba(0,0,0,.78)!important;backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px)}
+.winner-card{text-align:center}
+.winner-crown{filter:hue-rotate(-30deg) saturate(1.3)}
+.ice-winner div{background:rgba(10,10,12,.92)!important;border:1px solid var(--t-line)!important}
+.ice-winner small{color:#ff4d6e!important}
+.ice-bet-modal>*{background:linear-gradient(180deg,#111113,#09090a)!important;border-color:var(--t-line)!important}
+.settings,.graphics-settings,.graphics-quality-options button{background:#0e0e10!important;border:1px solid var(--t-line)!important;color:#fff!important}
