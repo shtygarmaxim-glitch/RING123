@@ -1,0 +1,101 @@
+services:
+  - type: web
+    name: telegram-stars-pvp-wheel
+    runtime: node
+    plan: free
+    region: oregon
+    buildCommand: npm install
+    startCommand: npm start
+    healthCheckPath: /health
+    envVars:
+      - key: NODE_ENV
+        value: production
+
+      # Render automatically injects the private Postgres connection string.
+      - key: DATABASE_URL
+        fromDatabase:
+          name: telegram-stars-pvp-db
+          property: connectionString
+
+      # Required only when connecting the Telegram bot.
+      - key: TELEGRAM_BOT_TOKEN
+        sync: false
+
+      - key: TELEGRAM_BOT_USERNAME
+        sync: false
+
+      # Keep the Gemini API key in Render Environment, never in source control.
+      - key: GEMINI_API_KEY
+        sync: false
+
+      # Optional bot welcome customization.
+      - key: WELCOME_TEXT
+        sync: false
+      - key: WELCOME_IMAGE_URL
+        sync: false
+      - key: WELCOME_APP_URL
+        sync: false
+      - key: WELCOME_CHANNEL_URL
+        sync: false
+      - key: WELCOME_SUPPORT_URL
+        sync: false
+
+      # Support bot token. Never hardcode the token into source; put the supplied token in Render Environment.
+      - key: SUPPORT_BOT_TOKEN
+        sync: false
+      - key: SUPPORT_BOT_USERNAME
+        sync: false
+      - key: SUPPORT_BOT_URL
+        sync: false
+      - key: SUPPORT_ADMIN_TELEGRAM_IDS
+        sync: false
+
+      # Public task creation pricing: reward × activations × multiplier.
+      # Admins create tasks for free.
+      - key: TASK_PRICE_MULTIPLIER
+        value: "1.5"
+
+      # Render generates this securely for the Blueprint.
+      - key: TELEGRAM_WEBHOOK_SECRET
+        generateValue: true
+
+      # Automatically resolves to this service's current public Render URL.
+      - key: TELEGRAM_MINI_APP_SHORT_NAME
+        sync: false
+      - key: APP_PUBLIC_URL
+        fromService:
+          name: telegram-stars-pvp-wheel
+          type: web
+          envVarKey: RENDER_EXTERNAL_URL
+
+      # Put your numeric Telegram user ID here during initial Blueprint setup.
+      - key: ADMIN_TELEGRAM_IDS
+        sync: false
+
+      # TON Connect manifest URL. Leave empty to use this service's /tonconnect-manifest.json.
+      - key: TON_CONNECT
+        sync: false
+      - key: TON_CONNECT_MANIFEST_URL
+        sync: false
+      # TON wallet that receives GRAM top-ups (TON transaction).
+      - key: TON_TOPUP_WALLET_ADDRESS
+        sync: false
+      - key: TON_CONNECT_WALLET_ADDRESS
+        sync: false
+      - key: TON_PER_STAR
+        sync: false
+      # API key from tonapi.io; optional but recommended for stable rate limits when verifying incoming TON transfers and
+      # credit the balance automatically.
+      - key: TONAPI_KEY
+        sync: false
+      - key: GRAM_USD_PER_STAR
+        value: "0.015"
+
+      - key: TELEGRAM_INIT_DATA_MAX_AGE
+        value: "86400"
+
+databases:
+  - name: telegram-stars-pvp-db
+    plan: free
+    region: oregon
+    postgresMajorVersion: "18"
