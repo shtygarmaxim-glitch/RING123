@@ -737,13 +737,19 @@ async function getUser(userId, { fresh = false } = {}) {
   return cacheUser(r.rows[0] || null);
 }
 
+// Стартовый баланс нового игрока (можно поменять переменной STARTING_BALANCE на Render).
+const STARTING_BALANCE = (() => {
+  const raw = Number(String(process.env.STARTING_BALANCE ?? "100").replace(",", "."));
+  return Number.isFinite(raw) && raw >= 0 ? Math.round(raw * 100) / 100 : 100;
+})();
+
 async function upsertUser(user, referralCode = null) {
   requireDatabase();
   const referral = String(referralCode || '').trim().replace(/^ref_/i, '');
   const referralOwner = (/^\d+$/.test(referral) && referral !== String(user.id)) ? referral : null;
   const r = await pool.query(
-    `INSERT INTO users (telegram_id, username, first_name, avatar_url, referred_by)
-     VALUES ($1,$2,$3,$4, CASE WHEN $5::text IS NOT NULL AND EXISTS (SELECT 1 FROM users WHERE telegram_id=$5) THEN $5 ELSE NULL END)
+    `INSERT INTO users (telegram_id, username, first_name, avatar_url, referred_by, balance)
+     VALUES ($1,$2,$3,$4, CASE WHEN $5::text IS NOT NULL AND EXISTS (SELECT 1 FROM users WHERE telegram_id=$5) THEN $5 ELSE NULL END, $6)
      ON CONFLICT (telegram_id) DO UPDATE SET
        username=EXCLUDED.username,
        first_name=EXCLUDED.first_name,
@@ -752,10 +758,24 @@ async function upsertUser(user, referralCode = null) {
        updated_at=NOW()
      RETURNING telegram_id, username, first_name, avatar_url, balance::float AS balance,
                banned, referred_by, games_played, games_won,
-               total_wagered::float AS total_wagered, created_at, updated_at`,
-    [user.id, user.username || '', user.first_name || 'Игрок', user.photo_url || '', referralOwner]
+               total_wagered::float AS total_wagered, created_at, updated_at,
+               (xmax = 0) AS was_inserted`,
+    [user.id, user.username || '', user.first_name || 'Игрок', user.photo_url || '', referralOwner, STARTING_BALANCE]
   );
-  return cacheUser(r.rows[0]);
+  const row = r.rows[0];
+  const wasInserted = !!row.was_inserted;
+  delete row.was_inserted;
+  // Новый игрок: пишем стартовые 100 в историю операций, чтобы баланс был объясним.
+  if (wasInserted && STARTING_BALANCE > 0) {
+    try {
+      await pool.query(
+        `INSERT INTO balance_transactions (telegram_user_id, type, amount, balance_after, description)
+         VALUES ($1,'welcome_bonus',$2,$3,'Стартовый баланс')`,
+        [String(user.id), STARTING_BALANCE, STARTING_BALANCE]
+      );
+    } catch (e) { console.error("welcome bonus log failed:", e.message); }
+  }
+  return cacheUser(row);
 }
 
 async function getBalance(userId) {
@@ -1734,6 +1754,9 @@ async function iceFinish() {
           );
         }
         await client.query("COMMIT");
+        // creditBalance сбросил кэш ещё до COMMIT — сбрасываем снова, чтобы не осталось устаревшего баланса.
+        invalidateUserCache(winner.id);
+        for (const p of iceRound.players) invalidateUserCache(p.id);
         io.to(`user:${winner.id}`).emit("balance_updated", { balance: balanceAfter });
       } catch (e) {
         try { await client.query("ROLLBACK"); } catch {}
@@ -2374,6 +2397,7 @@ async function sendAdminUserStats(chatId, userId, period) {
     referral_claim: "👥 Реферальная награда",
     freebet: "🎁 Фрибет",
     promo_bonus: "🏷 Промокод",
+    welcome_bonus: "🎁 Стартовый баланс",
     admin_credit: "🛠 Начисление админом",
     upgrade_win: "⬆️ Выигрыш Upgrade",
     bounce_win: "↩️ Выигрыш Отскок",
